@@ -5,7 +5,6 @@ var score
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	new_game()
 	pass # Replace with function body.
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -16,21 +15,27 @@ func _process(delta: float) -> void:
 func game_over() -> void:
 	$ScoreTimer.stop()
 	$MobTimer.stop()
-	pass # Replace with function body.
+	$HUB.show_game_over()
+	$Music.stop()
+	$DeathSound.play()
 	
 func new_game():
+	print("Señal recibida en Main, empezando juego...")
 	score = 0
 	$Player.start($StartPosition.position)
 	$StartTimer.start()
+	$HUB.update_score(score)
+	$HUB.show_message("Get Ready")
+	get_tree().call_group("mobs", "queue_free")
+	$Music.play()
 
 func _on_score_timer_timeout() -> void:
 	score += 1
-	pass # Replace with function body.
+	$HUB.update_score(score)
 
 func _on_start_timer_timeout() -> void:
 	$MobTimer.start()
 	$ScoreTimer.start()
-	pass # Replace with function body.
 
 func _on_mob_timer_timeout() -> void:
 	var mob = mob_scene.instantiate()
@@ -50,5 +55,4 @@ func _on_mob_timer_timeout() -> void:
 	mob.linear_velocity = velocity.rotated(direction)
 	
 	add_child(mob)
-	pass # Replace with function body.
 	

@@ -1,4 +1,4 @@
-extends Timer
+extends CanvasLayer
 
 signal start_game
 # Called when the node enters the scene tree for the first time.
@@ -11,9 +11,9 @@ func _process(delta: float) -> void:
 	pass
 	
 func show_message(text):
-	%Message.text = text
-	%Message.show()
-	%MessageTimer.start()
+	$Message.text = text
+	$Message.show()
+	$MessageTimer.start()
 	
 func show_game_over():
 	show_message("Game Over")
@@ -31,9 +31,10 @@ func update_score(score):
 
 
 func _on_start_button_pressed() -> void:
-	$StarButton.hide()
+	print("Botón presionado en HUD")
+	$StartButton.hide()
 	start_game.emit()
 
 
-func _on_timeout() -> void:
+func _on_message_timer_timeout() -> void:
 	$Message.hide()
